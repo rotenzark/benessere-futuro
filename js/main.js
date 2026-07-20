@@ -151,7 +151,13 @@
 
   /* ---------- intro skippabile ---------- */
   var intro = document.getElementById(SITE.introId);
-  var heroEntrance = window.bespokeHeroEntrance || function () {};
+  /* ⚠️ L'hook si legge AL MOMENTO DELLA CHIAMATA: il codice-firma sta sotto
+     il marcatore di fine plumbing e assegna window.bespokeHeroEntrance DOPO
+     questa riga. Catturarlo per valore congelava la funzione vuota e l'hero
+     restava a opacity 0 sul live. (20/7/2026 — fix riportato nel canone.) */
+  function heroEntrance() {
+    if (typeof window.bespokeHeroEntrance === 'function') window.bespokeHeroEntrance();
+  }
   function hideIntro() {
     if (!intro) return;
     var el = intro; intro = null;
