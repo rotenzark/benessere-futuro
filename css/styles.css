@@ -1,0 +1,419 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Benessere Futuro — Deb & Cri · Viale Fulvio Testi 93, Milano
+   Concept: «l'indice del corpo» — il sito si percorre dall'alto al
+   basso come un corpo, viso → piedi, perché il loro listino è già
+   organizzato così.
+   Palette dal reale: il nero e il fucsia sono i colori delle loro
+   divise; il legno chiaro e la crema sono l'interno del salone.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --nero: #141013;
+  --nero-soft: #241d22;
+  --fucsia: #E5257F;
+  --fucsia-scuro: #B81A63;
+  --crema: #F7F1EA;
+  --legno: #E3D3C0;
+  --legno-scuro: #C9B49C;
+  --testo: #241d22;
+  --testo-soft: #6b5f66;
+  --bianco: #ffffff;
+
+  --display: 'Frank Ruhl Libre', Georgia, serif;
+  --corpo: 'Assistant', system-ui, -apple-system, sans-serif;
+
+  --max: 1240px;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--corpo);
+  font-size: clamp(1rem, 0.97rem + 0.16vw, 1.09rem);
+  line-height: 1.65;
+  color: var(--testo);
+  background: var(--crema);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--display); font-weight: 500; line-height: 1.08; margin: 0; }
+p { margin: 0 0 1rem; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 200;
+  background: var(--nero); color: var(--bianco); padding: .8rem 1.2rem;
+}
+.skip:focus { left: 0; }
+
+/* ---------- reveal (anti-FOUC canonico) ---------- */
+.js .reveal { opacity: 0; }
+.js .reveal.in-view { opacity: 1; }
+html:not(.js) .reveal { opacity: 1; }
+
+/* ---------- intro ---------- */
+#intro {
+  position: fixed; inset: 0; z-index: 120;
+  background: var(--nero);
+  display: grid; place-items: center;
+  transition: opacity .6s ease;
+}
+#intro.hide { opacity: 0; pointer-events: none; }
+#intro line { stroke: rgba(247,241,234,.3); stroke-width: 2; }
+#intro circle { fill: var(--fucsia); }
+#introAsse {
+  stroke-dasharray: 180; stroke-dashoffset: 180;
+  animation: tracciaAsse 1s ease forwards;
+}
+.introNodo { opacity: 0; animation: nodoOn .45s ease forwards; }
+.introNodo:nth-of-type(1) { animation-delay: .5s; }
+.introNodo:nth-of-type(2) { animation-delay: .7s; }
+.introNodo:nth-of-type(3) { animation-delay: .9s; }
+@keyframes tracciaAsse { to { stroke-dashoffset: 0; } }
+@keyframes nodoOn { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  #introAsse, .introNodo { animation: none; stroke-dashoffset: 0; opacity: 1; }
+}
+
+/* ---------- header ---------- */
+.top {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 1rem;
+  padding: .85rem var(--gutter);
+  background: var(--nero);
+  color: var(--crema);
+}
+.marchio { text-decoration: none; display: flex; flex-direction: column; line-height: 1.05; margin-right: auto; }
+.marchio-a {
+  font-family: var(--corpo); font-size: .68rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--fucsia);
+}
+.marchio-b { font-family: var(--display); font-size: 1.22rem; font-weight: 500; }
+
+.top nav { display: flex; align-items: center; gap: 1.6rem; }
+.top nav a {
+  text-decoration: none; font-size: .87rem; font-weight: 600;
+  letter-spacing: .02em; padding: .3rem 0;
+  border-bottom: 1px solid transparent;
+}
+.top nav a:hover, .top nav a:focus-visible { border-bottom-color: var(--fucsia); }
+.nav-tel { color: var(--fucsia) !important; }
+
+#langToggle {
+  background: none; border: 1px solid rgba(247,241,234,.35); color: inherit;
+  font: inherit; font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+  padding: .4rem .6rem; cursor: pointer; border-radius: 2px;
+}
+#langToggle:hover { border-color: var(--fucsia); color: var(--fucsia); }
+
+#burger { display: none; background: none; border: 0; cursor: pointer; padding: .4rem; }
+#burger span { display: block; width: 24px; height: 2px; background: var(--crema); margin: 5px 0; }
+
+/* ---------- hero: split colore / foto ---------- */
+#hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100svh - 66px);
+  background: var(--nero);
+  color: var(--crema);
+}
+.hero-testo {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(2.5rem, 6vw, 5.5rem) var(--gutter);
+}
+.occhiello {
+  font-size: .74rem; font-weight: 700; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--legno-scuro); margin-bottom: 1.6rem;
+}
+#heroTitolo {
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-weight: 400; letter-spacing: -.02em; margin-bottom: 1.6rem;
+}
+#heroTitolo .riga { display: block; }
+#heroTitolo .accento { color: var(--fucsia); font-style: italic; }
+.hero-p { max-width: 44ch; color: rgba(247,241,234,.82); font-size: 1.05rem; }
+.hero-p strong { color: var(--crema); font-weight: 600; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.6rem 0 1.8rem; }
+.hero-nota { font-size: .9rem; color: rgba(247,241,234,.65); margin: 0; }
+.hero-nota strong { color: var(--fucsia); font-size: 1.15rem; font-family: var(--display); }
+
+.hero-foto { position: relative; overflow: hidden; }
+.hero-foto img { width: 100%; height: 100%; object-fit: cover; }
+
+.btn {
+  display: inline-block; text-decoration: none;
+  font-weight: 700; font-size: .88rem; letter-spacing: .06em;
+  text-transform: uppercase; padding: .95rem 1.7rem;
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+.btn-pieno { background: var(--fucsia); color: var(--bianco); }
+.btn-pieno:hover, .btn-pieno:focus-visible { background: var(--fucsia-scuro); }
+.btn-vuoto { border: 1px solid rgba(247,241,234,.45); color: var(--crema); }
+.btn-vuoto:hover, .btn-vuoto:focus-visible { border-color: var(--fucsia); color: var(--fucsia); }
+
+/* ---------- le due ---------- */
+#due {
+  display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+  max-width: var(--max); margin: 0 auto;
+  padding: clamp(4rem, 9vw, 7rem) var(--gutter);
+}
+.due-foto img { width: 100%; }
+.due-testo h2 { font-size: clamp(2rem, 4vw, 3.1rem); margin-bottom: 2.2rem; }
+.mestiere {
+  border-left: 2px solid var(--legno);
+  padding-left: 1.4rem; margin-bottom: 1.9rem;
+}
+.mestiere-nome {
+  font-family: var(--display); font-size: 1.5rem; font-weight: 700;
+  margin: 0; line-height: 1.2;
+}
+.mestiere-ruolo {
+  font-size: .72rem; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--fucsia); margin: .15rem 0 .7rem;
+}
+.mestiere p:last-child { margin: 0; color: var(--testo-soft); }
+.due-coda { font-size: .95rem; color: var(--testo-soft); margin: 0; }
+
+/* ══════ L'INDICE DEL CORPO — la sezione-firma ══════ */
+#corpo {
+  background: var(--nero);
+  color: var(--crema);
+  padding: clamp(4rem, 9vw, 7rem) 0;
+}
+.corpo-intro {
+  max-width: var(--max); margin: 0 auto clamp(2.5rem, 6vw, 4.5rem);
+  padding: 0 var(--gutter);
+}
+.corpo-intro h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); margin-bottom: .9rem; }
+.corpo-intro p { color: rgba(247,241,234,.66); max-width: 52ch; margin: 0; }
+
+.corpo-griglia {
+  position: relative;
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid; grid-template-columns: 56px 1fr; gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+/* l'asse: sticky, con la barra che si riempie e il marcatore che scende */
+.asse {
+  position: sticky; top: 50vh; height: 0;
+  align-self: start;
+  justify-self: center;
+}
+.asse-linea {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  top: -38vh; width: 2px; height: 76vh;
+  background: rgba(247,241,234,.14);
+}
+.asse-riempi {
+  position: absolute; top: 0; left: 0; width: 100%; height: 0;
+  background: var(--fucsia);
+}
+.asse-marker {
+  position: absolute; left: 50%; top: 0;
+  width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px;
+  border-radius: 50%; background: var(--fucsia);
+  box-shadow: 0 0 0 6px rgba(229,37,127,.18);
+}
+
+.zone { list-style: none; margin: 0; padding: 0; }
+
+.zona {
+  padding: clamp(2.2rem, 5vw, 3.4rem) 0;
+  border-bottom: 1px solid rgba(247,241,234,.11);
+}
+.zona:last-child { border-bottom: 0; }
+
+.zona-testa { display: flex; align-items: baseline; flex-wrap: wrap; gap: .9rem; margin-bottom: 1.4rem; }
+.zona-num {
+  font-family: var(--display); font-size: .85rem; font-weight: 700;
+  letter-spacing: .12em; color: var(--fucsia);
+}
+.zona-testa h3 {
+  font-size: clamp(1.9rem, 4vw, 2.9rem); font-weight: 400;
+  color: rgba(247,241,234,.45);
+  transition: color .5s ease;
+}
+.zona.attiva .zona-testa h3 { color: var(--crema); }
+/* senza JS nessuna zona riceve .attiva: il listino non può restare spento */
+html:not(.js) .zona-testa h3 { color: var(--crema); }
+.zona-conta {
+  font-size: .74rem; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--legno-scuro);
+}
+
+.voci { list-style: none; margin: 0 0 1rem; padding: 0; }
+.voci li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: .72rem 0;
+  border-bottom: 1px dotted rgba(247,241,234,.16);
+}
+.voci li:last-child { border-bottom: 0; }
+.v-nome { color: rgba(247,241,234,.92); }
+.v-dur {
+  font-size: .8rem; font-weight: 600; letter-spacing: .08em;
+  color: var(--legno-scuro); font-variant-numeric: tabular-nums;
+}
+.v-prezzo {
+  font-family: var(--display); font-size: 1.2rem; font-weight: 700;
+  color: var(--fucsia); min-width: 4.2rem; text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.zona-nota { color: rgba(247,241,234,.6); max-width: 58ch; margin: 0; font-size: .96rem; }
+.zona-nota strong { color: var(--crema); font-weight: 600; }
+
+.corpo-coda {
+  max-width: var(--max); margin: clamp(2.5rem, 5vw, 3.5rem) auto 0;
+  padding: 0 var(--gutter);
+  color: rgba(247,241,234,.55); font-size: .95rem;
+}
+
+/* ---------- voci / recensioni ---------- */
+#voci {
+  max-width: var(--max); margin: 0 auto;
+  padding: clamp(4rem, 9vw, 7rem) var(--gutter);
+}
+#voci h2 { font-size: clamp(2rem, 4.4vw, 3.1rem); margin-bottom: .5rem; }
+.voci-sub { color: var(--testo-soft); margin-bottom: 2.6rem; }
+.voci-sub strong { color: var(--fucsia); font-family: var(--display); font-size: 1.35rem; }
+.voci-griglia {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.3rem;
+}
+.voci-griglia blockquote {
+  margin: 0; padding: 1.7rem 1.6rem;
+  background: var(--bianco);
+  border-top: 3px solid var(--fucsia);
+}
+.voci-griglia p { font-size: 1.02rem; margin-bottom: .9rem; }
+.voci-griglia cite {
+  font-style: normal; font-size: .76rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--testo-soft);
+}
+
+/* ---------- il salone ---------- */
+#salone {
+  display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 var(--gutter) clamp(4rem, 9vw, 7rem);
+}
+.salone-foto button {
+  padding: 0; border: 0; background: none; cursor: zoom-in; display: block; width: 100%;
+}
+.salone-testo h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); margin-bottom: 1rem; }
+.salone-testo p { color: var(--testo-soft); margin: 0; }
+
+/* ---------- dove ---------- */
+#dove {
+  display: grid; grid-template-columns: .9fr 1.1fr;
+  background: var(--legno);
+}
+.dove-info { padding: clamp(3rem, 7vw, 5rem) var(--gutter); }
+.dove-info h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin-bottom: 1.2rem; }
+.indirizzo { font-family: var(--display); font-size: 1.3rem; line-height: 1.4; }
+.mezzi { color: #5c4f43; font-size: .95rem; }
+.stato {
+  display: inline-block; font-weight: 700; font-size: .82rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  background: var(--nero); color: var(--crema);
+  padding: .45rem .9rem; margin: .4rem 0 1.4rem;
+}
+.orari { list-style: none; margin: 0 0 1.8rem; padding: 0; max-width: 340px; }
+.orari li {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: .48rem 0; border-bottom: 1px solid rgba(20,16,19,.13);
+  font-size: .95rem;
+}
+.orari li.is-today { font-weight: 700; color: var(--fucsia-scuro); }
+.dove-cta { display: flex; flex-wrap: wrap; gap: .8rem; }
+.dove-cta .btn-vuoto { border-color: rgba(20,16,19,.4); color: var(--nero); }
+.dove-cta .btn-vuoto:hover { border-color: var(--fucsia); color: var(--fucsia-scuro); }
+.dove-mappa iframe { width: 100%; height: 100%; min-height: 380px; display: block; }
+
+/* ---------- footer ---------- */
+footer {
+  background: var(--nero); color: rgba(247,241,234,.72);
+  padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter);
+  text-align: center; font-size: .92rem;
+}
+footer p { margin: 0 0 .5rem; }
+.foot-marchio {
+  font-family: var(--display); font-size: 1.25rem; color: var(--crema);
+  margin-bottom: .8rem;
+}
+footer a { color: var(--fucsia); }
+.foot-nota { font-size: .8rem; color: rgba(247,241,234,.4); margin-top: 1.2rem; }
+
+/* ---------- action bar mobile ---------- */
+#actionBar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+  display: none; transform: translateY(100%); transition: transform .3s ease;
+}
+#actionBar.is-visible { transform: translateY(0); }
+#actionBar a {
+  flex: 1; text-align: center; text-decoration: none;
+  padding: .95rem .5rem; font-size: .82rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+}
+#actionBar a:first-child { background: var(--fucsia); color: var(--bianco); }
+#actionBar a:last-child { background: var(--nero); color: var(--crema); }
+
+/* ---------- lightbox ---------- */
+#lightbox {
+  position: fixed; inset: 0; z-index: 150;
+  background: rgba(20,16,19,.94);
+  display: flex; align-items: center; justify-content: center; padding: 2rem;
+}
+#lightbox[hidden] { display: none !important; }
+#lightbox img { max-width: 92vw; max-height: 88vh; object-fit: contain; }
+#lightboxClose {
+  position: absolute; top: 1.2rem; right: 1.4rem;
+  background: none; border: 0; color: var(--crema);
+  font-size: 2.4rem; line-height: 1; cursor: pointer;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  #hero { grid-template-columns: 1fr; min-height: 0; }
+  .hero-foto { order: -1; max-height: 46vh; }
+  #due, #salone, #dove { grid-template-columns: 1fr; }
+  .due-foto { max-width: 480px; }
+  .salone-foto { max-width: 560px; }
+  .dove-mappa iframe { min-height: 300px; }
+}
+
+@media (max-width: 760px) {
+  .top nav {
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: flex-start; gap: 0;
+    background: var(--nero-soft);
+    padding: 0 var(--gutter);
+    max-height: 0; overflow: hidden;
+    transition: max-height .3s ease, padding .3s ease;
+  }
+  .top nav.nav-open { max-height: 320px; padding: 1rem var(--gutter) 1.4rem; }
+  .top nav a { width: 100%; padding: .7rem 0; }
+  #burger { display: block; }
+  #actionBar { display: flex; }
+  body { padding-bottom: 0; }
+
+  .corpo-griglia { grid-template-columns: 26px 1fr; gap: 1.1rem; }
+  /* Il prezzo occupa due righe nella SECONDA colonna: senza grid-column
+     esplicita l'auto-placement lo infilava nella prima e il listino usciva
+     col prezzo a sinistra del nome (visto sullo screenshot mobile). */
+  .voci li { grid-template-columns: 1fr auto; row-gap: .15rem; }
+  .v-nome { grid-column: 1; grid-row: 1; }
+  .v-dur { grid-column: 1; grid-row: 2; font-size: .74rem; }
+  .v-prezzo { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+}
